@@ -105,3 +105,24 @@ func recordsListRequestEventWrapper(fn func(e *core.RecordsListRequestEvent) err
 		return e.Next()
 	}
 }
+
+
+func recordRequestCheckPhoneNumberWrapper(fn func(e *core.RecordRequestEvent)  error) func(e *core.RecordRequestEvent) error {
+	return func(e *core.RecordRequestEvent)  error {
+		err := fn(e)
+		if err != nil {
+			return err
+		}
+		return  e.Next()
+	}
+}
+
+func recordRequestCheckBirthDateWrapper(fn func(e *core.RecordRequestEvent)  error) func(e *core.RecordRequestEvent) error {
+	return func(e *core.RecordRequestEvent)  error {
+		err := fn(e)
+		if err != nil {
+			return err
+		}
+		return  e.Next()
+	}
+}

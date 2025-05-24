@@ -1,9 +1,11 @@
 package hook
 
 import (
-	"github.com/pocketbase/pocketbase"
-	"gitlab.saidoff.uz/company/muslim-administration/reading/back/internal/service"
 	"log/slog"
+
+	"github.com/pocketbase/pocketbase"
+	"gitlab.saidoff.uz/company/muslim-administration/reading/back/internal/model"
+	"gitlab.saidoff.uz/company/muslim-administration/reading/back/internal/service"
 )
 
 type Hook struct {
@@ -17,6 +19,10 @@ func (h *Hook) Register(app *pocketbase.PocketBase) {
 	//
 	//app.OnMailerRecordPasswordResetSend().BindFunc(mailerRecordPasswordResetSendEventWrapper)
 	//app.OnMailerRecordOTPSend().BindFunc(mailerRecordOTPSendEventWrapper)
+	app.OnRecordCreateRequest(model.UsersCollection).BindFunc(recordRequestCheckPhoneNumberWrapper(h.checkPhoneNumber))
+	app.OnRecordUpdateRequest(model.UsersCollection).BindFunc(recordRequestCheckPhoneNumberWrapper(h.checkPhoneNumber))
+	app.OnRecordCreateRequest(model.UsersCollection).BindFunc(recordRequestCheckBirthDateWrapper(h.CheckBirthDate))
+	app.OnRecordUpdateRequest(model.UsersCollection).BindFunc(recordRequestCheckBirthDateWrapper(h.CheckBirthDate))
 }
 
 func New(logger *slog.Logger, service service.I) *Hook {
