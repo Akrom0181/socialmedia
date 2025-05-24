@@ -18,9 +18,10 @@ func NewApp(config *config.Config) *pocketbase.PocketBase {
 		db := app.DB()
 		logger := app.Logger()
 
-		services := service.NewService(db)
+		redis := service.New()
+		services := service.NewService(db, *redis)
 
-		handlers := handler.NewHandler(logger, services, config)
+		handlers := handler.NewHandler(logger, services, config, redis)
 		hooks := hook.New(logger, services)
 
 		handlers.Register(e.Router)

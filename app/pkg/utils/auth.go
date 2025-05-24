@@ -2,8 +2,14 @@ package utils
 
 import "regexp"
 
-func IsValidUzbPhoneNumber(phone string) bool {
-	uzbPhoneRegex := `^998(90|91|93|94|95|97|98|99|50|88)\d{7}$`
-	reg := regexp.MustCompile(uzbPhoneRegex)
-	return reg.MatchString(phone)
+func ValidatePhoneNumber(phoneNumber string) bool {
+	starting := `^\+998\d{9}$`
+	correct, err := regexp.MatchString(starting, phoneNumber)
+	if err != nil {
+		return false
+	}
+	if !correct {
+		return false
+	}
+	return true
 }
